@@ -14,9 +14,8 @@ func NewActionService(repo *Repository.ActionRepository) *ActionService {
     return &ActionService{repo: repo}
 }
 
-func (s *ActionService) GetAllActions() ([]Dto.Action, error) {
-    // Call the repository method to retrieve all actions
-    actions, err := s.repo.GetAllActions();
+func (this *ActionService) SearchActions(actionApiArgs Dto.ActionApiArguments) ([]Dto.Action, error) {
+    actions, err := this.repo.SearchActions(actionApiArgs);
     
     if err != nil {
         return nil, err
@@ -25,6 +24,32 @@ func (s *ActionService) GetAllActions() ([]Dto.Action, error) {
     return actions, nil;
 }
 
-func (s *ActionService) GetTest() string {
-    return "abc"
+func (this *ActionService) GetAction(id string) ([]Dto.Action, error) {
+    actions, err := this.repo.GetAction(id);
+    
+    if err != nil {
+        return nil, err
+    }
+
+    return actions, nil;
+}
+
+func (this *ActionService) CreateAction(action Dto.Action) ([]Dto.Action, error) {
+    actions, err := this.repo.CreateAction(action);
+    
+    if err != nil {
+        return nil, err
+    }
+
+    return actions, nil;
+}
+
+func (this *ActionService) HideAction(id string) ([]Dto.Action, error) {
+    actions, err := this.repo.HideAction(id);
+    
+    if err != nil {
+        return nil, err
+    }
+
+    return actions, nil;
 }
