@@ -24,12 +24,22 @@ func (this *ActionRepository) buildSearchQuery(args Dto.ActionApiArguments) *gor
         query = query.Where("name LIKE ?", "%" + args.Name + "%")
     }
 
+    if (args.Name != "") {
+        query = query.Where("description_ LIKE ?", "%" + args.Description + "%")
+    }
+
     switch args.OrderBy {
     case "NAME":
         if args.SortOrder == Dto.ASC {
             query = query.Order("name ASC")
         } else if args.SortOrder == Dto.DESC {
             query = query.Order("name DESC")
+        }
+    case "SECONDS":
+        if args.SortOrder == Dto.ASC {
+            query = query.Order("seconds ASC")
+        } else if args.SortOrder == Dto.DESC {
+            query = query.Order("seconds DESC")
         }
     case "CREATEDAT":
         if args.SortOrder == Dto.ASC {

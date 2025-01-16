@@ -5,4 +5,5 @@ type OrderBy string
 const (
     NAME  OrderBy = "NAME"
     CREATEDAT OrderBy = "CREATEDAT"
+    SECONDS OrderBy = "SECONDS"
 )

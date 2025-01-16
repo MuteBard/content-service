@@ -102,6 +102,7 @@ func ManageApiArguments(r *http.Request) Dto.ActionApiArguments{
     actionApiArgs := Dto.ActionApiArguments {
         Name:      queryValues.Get("name"),
         IsHidden:  isHidden,
+        Description: queryValues.Get("description"),
         SortOrder: Dto.SortOrder(queryValues.Get("sortOrder")),
         OrderBy:   Dto.OrderBy(queryValues.Get("orderBy")),
     }
