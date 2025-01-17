@@ -59,7 +59,7 @@ func (this *ActionRepository) SearchActions(args Dto.ActionApiArguments) ([]Dto.
 
     query := this.buildSearchQuery(args)
 
-    if err := query.Select("id, name, created_at, token").Find(&actions).Error; err != nil {
+    if err := query.Select("id, name, created_at, description_, seconds, token").Find(&actions).Error; err != nil {
         return nil, err
     }
 

@@ -45,6 +45,8 @@ func NewActionController(service *Service.ActionService)  {
         action := Dto.Action {
             Name: data["name"].(string),
             CreatedAt: time.Now().Format(time.RFC3339),
+            Description: data["description"].(string),
+            Seconds:data["seconds"].(float64),
             Token: data["token"].(string),
         }
 
