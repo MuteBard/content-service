@@ -1,6 +1,7 @@
 package mirrorMove
 
 import (
+    "time"
     "github.com/jinzhu/gorm"
     Dto "mirrorMove/src/dtos"
 )
@@ -59,7 +60,7 @@ func (this *ActionRepository) SearchActions(args Dto.ActionApiArguments) ([]Dto.
 
     query := this.buildSearchQuery(args)
 
-    if err := query.Select("id, name, created_at, description_, seconds, token").Find(&actions).Error; err != nil {
+    if err := query.Select("id, name, created_at, description_, seconds, is_hidden, token").Find(&actions).Error; err != nil {
         return nil, err
     }
 
@@ -86,6 +87,31 @@ func (this *ActionRepository) CreateAction(action Dto.Action) ([]Dto.Action, err
     }
    
     actions = append(actions,action)
+    
+    return actions, nil
+}
+
+func (this *ActionRepository) UpdateAction(action Dto.Action) ([]Dto.Action, error) {
+    var actions []Dto.Action
+
+    existingAction := Dto.Action{}
+    if err := this.db.Where("id = ?", action.Id).First(&existingAction).Error; err != nil {
+        return nil, err
+    }
+
+    // Update the existing action with the new values
+    existingAction.Name = action.Name
+    existingAction.CreatedAt = time.Now().Format(time.RFC3339)
+    existingAction.Description = action.Description
+    existingAction.Seconds = action.Seconds
+    existingAction.Token = action.Token
+
+    // Save the updated action back to the database
+    if err := this.db.Save(&existingAction).Error; err != nil {
+        return nil, err
+    }
+
+    actions = append(actions, existingAction)
     
     return actions, nil
 }

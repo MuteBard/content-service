@@ -2,6 +2,7 @@ package mirrorMove
 
 import (
     "fmt"
+    "strconv"
     "log"
     "time"
     "net/http"
@@ -51,6 +52,37 @@ func NewActionController(service *Service.ActionService)  {
         }
 
         result, err := service.CreateAction(action)
+        ErrorResponseHandler(w, err)
+        jsonResponse, err := json.Marshal(result)
+        JSONResponseHandler(w, jsonResponse, err)
+    })
+
+    mux.HandleFunc("PATCH /action", func(w http.ResponseWriter, r *http.Request) {
+        log.Println("PATCH /action")
+
+        var data map[string]interface{}
+        if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+            http.Error(w, "Bad Request", http.StatusBadRequest)
+            return
+        }
+
+        id, err := strconv.Atoi(fmt.Sprintf("%v", data["id"]))
+        if err != nil {
+            fmt.Println(data["id"])
+            http.Error(w, "Invalid ID", http.StatusBadRequest)
+            return
+        }
+
+        action := Dto.Action {
+            Id: uint(id),
+            Name: data["name"].(string),
+            CreatedAt: time.Now().Format(time.RFC3339),
+            Description: data["description"].(string),
+            Seconds:data["seconds"].(float64),
+            Token: data["token"].(string),
+        }
+
+        result, err := service.UpdateAction(action)
         ErrorResponseHandler(w, err)
         jsonResponse, err := json.Marshal(result)
         JSONResponseHandler(w, jsonResponse, err)

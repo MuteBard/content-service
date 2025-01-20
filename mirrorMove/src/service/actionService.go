@@ -44,6 +44,17 @@ func (this *ActionService) CreateAction(action Dto.Action) ([]Dto.Action, error)
     return actions, nil;
 }
 
+func (this *ActionService) UpdateAction(action Dto.Action) ([]Dto.Action, error) {
+    actions, err := this.repo.UpdateAction(action);
+    
+    if err != nil {
+        return nil, err
+    }
+
+    return actions, nil;
+}
+
+
 func (this *ActionService) HideAction(id string) ([]Dto.Action, error) {
     actions, err := this.repo.HideAction(id);
     
