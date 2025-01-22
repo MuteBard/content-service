@@ -9,6 +9,7 @@ import (
     Service "mirrorMove/src/service"
     Repository "mirrorMove/src/repository"
     Env "mirrorMove/src/env"
+    "net/http"
 )
 
 
@@ -24,7 +25,31 @@ func main() {
 
     actionsRepo := Repository.NewActionRepository(db)
     actionsService := Service.NewActionService(actionsRepo)
-    Controller.NewActionController(actionsService)
+
+    movesRepo := Repository.NewMoveRepository(db)
+    movesService := Service.NewMoveService(movesRepo)
+
+    mux := http.NewServeMux()
+
+    actionController :=  Controller.NewActionController(actionsService)
+    moveController :=  Controller.NewMoveController(movesService)
+
+
+
+    mux.HandleFunc("GET /action/search", actionController.SearchAction)
+    mux.HandleFunc("GET /action/{id}", actionController.GetAction)
+    mux.HandleFunc("POST /action", actionController.CreateAction)
+    mux.HandleFunc("PATCH /action", actionController.PatchAction)
+    mux.HandleFunc("DELETE /action/{id}", actionController.DeleteAction)
+
+    mux.HandleFunc("GET /move/{id}", moveController.GetMove)
+    mux.HandleFunc("POST /move", moveController.CreateMove)
+
+
+    err = http.ListenAndServe("localhost:8080", mux)
+    if err != nil {
+        log.Fatal(err)
+    }
 
     log.Println("Application started successfully")
 }
