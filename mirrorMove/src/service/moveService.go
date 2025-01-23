@@ -15,15 +15,15 @@ func NewMoveService(repo *Repository.MoveRepository) *MoveService {
     return &MoveService{repo: repo}
 }
 
-// func (this *MoveService) GetMove(id string) ([]Dto.Move, error) {
-//     moves, err := this.repo.GetMove(id);
+func (this *MoveService) GetMove(id string) ([]Dto.Move, error) {
+    moves, err := this.repo.GetMove(id);
     
-//     if err != nil {
-//         return nil, err
-//     }
+    if err != nil {
+        return nil, err
+    }
 
-//     return moves, nil;
-// }
+    return moves, nil;
+}
 
 func (this *MoveService) CreateMove(moveCreate Dto.MoveCreate) ([]Dto.Move, error) {
     moves, err := this.repo.CreateMove(moveCreate);

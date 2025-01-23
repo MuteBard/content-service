@@ -21,11 +21,11 @@ func NewMoveController(service * Service.MoveService) * MoveController {
 
 func (mc *MoveController) GetMove(w http.ResponseWriter, r *http.Request){
     id := r.PathValue("id")
-    log.Println("GET /action/"+id)
-    // result, err := mc.service.GetMove(id)
-    // ErrorResponseHandler(w, err)
-    // jsonResponse, err := json.Marshal(result)
-    // JSONResponseHandler(w, jsonResponse, err)
+    log.Println("GET /move/"+id)
+    result, err := mc.service.GetMove(id)
+    ErrorResponseHandler(w, err)
+    jsonResponse, err := json.Marshal(result)
+    JSONResponseHandler(w, jsonResponse, err)
 }
 
 func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
