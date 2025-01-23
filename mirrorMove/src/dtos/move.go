@@ -7,6 +7,6 @@ type Move struct {
     IsHidden        bool     `gorm:"column:is_hidden"`
     Description     string   `gorm:"column:description_"`
     Seconds         float64  `gorm:"column:seconds"`
-    Actions         []MoveAction
+    Actions         []LoopableAction
 }
 

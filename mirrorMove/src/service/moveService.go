@@ -2,7 +2,7 @@ package mirrorMove
 
 import (
     Repository "mirrorMove/src/repository"
-	// Dto "mirrorMove/src/dtos"
+	Dto "mirrorMove/src/dtos"
 
 )
 
@@ -25,12 +25,12 @@ func NewMoveService(repo *Repository.MoveRepository) *MoveService {
 //     return moves, nil;
 // }
 
-// func (this *MoveService) CreateMove(moveCreate Dto.MoveCreate) ([]Dto.Move, error) {
-//     moves, err := this.repo.CreateMove(moveCreate);
+func (this *MoveService) CreateMove(moveCreate Dto.MoveCreate) ([]Dto.Move, error) {
+    moves, err := this.repo.CreateMove(moveCreate);
     
-//     if err != nil {
-//         return nil, err
-//     }
+    if err != nil {
+        return nil, err
+    }
 
-//     return moves, nil;
-// }
+    return moves, nil;
+}

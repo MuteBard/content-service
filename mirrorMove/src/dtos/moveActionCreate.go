@@ -1,6 +1,6 @@
 package mirrorMove
 
 type MoveActionCreate struct {
-	ActionId  			uint	
-	Loops        	int
+	ActionId  	uint	
+	Loops       int
 }

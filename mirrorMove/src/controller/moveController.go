@@ -30,16 +30,16 @@ func (mc *MoveController) GetMove(w http.ResponseWriter, r *http.Request){
 
 func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
     var moveCreate Dto.MoveCreate
-
-    // Decode the request body into the MoveCreate DTO
     err := json.NewDecoder(r.Body).Decode(&moveCreate)
     if err != nil {
         http.Error(w, "Failed to decode request body", http.StatusBadRequest)
         return
     }
 
+    result, err := mc.service.CreateMove(moveCreate)
+
     ErrorResponseHandler(w, err)
-    jsonResponse, err := json.Marshal( moveCreate)
+    jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 
 }
