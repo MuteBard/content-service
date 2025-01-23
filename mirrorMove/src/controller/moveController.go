@@ -19,6 +19,16 @@ func NewMoveController(service * Service.MoveService) * MoveController {
     return &MoveController{service : service}
 }
 
+func (mc *MoveController) SearchMove(w http.ResponseWriter, r *http.Request){
+    log.Println("GET /move/search")
+    moveApiArgs := ManageMoveApiArguments(r)
+
+    result, err := mc.service.SearchMoves(moveApiArgs)
+    ErrorResponseHandler(w, err)
+    jsonResponse, err := json.Marshal(result)
+    JSONResponseHandler(w, jsonResponse, err)
+}
+
 func (mc *MoveController) GetMove(w http.ResponseWriter, r *http.Request){
     id := r.PathValue("id")
     log.Println("GET /move/"+id)
@@ -46,3 +56,24 @@ func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
 
 
 
+func ManageMoveApiArguments(r *http.Request) Dto.MoveApiArguments{
+    queryValues := r.URL.Query()
+
+    isHiddenStr := queryValues.Get("isHidden")
+    var isHidden bool
+    if isHiddenStr == "true" {
+        isHidden = true
+    } else {
+        isHidden = false
+    }
+
+    moveApiArgs := Dto.MoveApiArguments {
+        Name:      queryValues.Get("name"),
+        IsHidden:  isHidden,
+        Description: queryValues.Get("description"),
+        SortOrder: Dto.SortOrder(queryValues.Get("sortOrder")),
+        OrderBy:   Dto.OrderBy(queryValues.Get("orderBy")),
+    }
+
+    return moveApiArgs
+}

@@ -42,6 +42,7 @@ func main() {
     mux.HandleFunc("PATCH /action", actionController.PatchAction)
     mux.HandleFunc("DELETE /action/{id}", actionController.DeleteAction)
 
+    mux.HandleFunc("GET /move/search", moveController.SearchMove)
     mux.HandleFunc("GET /move/{id}", moveController.GetMove)
     mux.HandleFunc("POST /move", moveController.CreateMove)
 

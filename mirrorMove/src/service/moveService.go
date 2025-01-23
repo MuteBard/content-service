@@ -25,6 +25,16 @@ func (this *MoveService) GetMove(id string) ([]Dto.Move, error) {
     return moves, nil;
 }
 
+func (this *MoveService) SearchMoves(moveApiArgs Dto.MoveApiArguments) ([]Dto.Move, error) {
+    moves, err := this.repo.SearchMoves(moveApiArgs);
+    
+    if err != nil {
+        return nil, err
+    }
+
+    return moves, nil;
+}
+
 func (this *MoveService) CreateMove(moveCreate Dto.MoveCreate) ([]Dto.Move, error) {
     moves, err := this.repo.CreateMove(moveCreate);
     

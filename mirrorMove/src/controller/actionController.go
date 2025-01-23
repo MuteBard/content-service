@@ -23,7 +23,7 @@ func NewActionController(service * Service.ActionService) * ActionController {
 
 func (ac *ActionController) SearchAction(w http.ResponseWriter, r *http.Request){
     log.Println("GET /action/search")
-    actionApiArgs := ManageApiArguments(r)
+    actionApiArgs := ManageActionApiArguments(r)
 
     result, err := ac.service.SearchActions(actionApiArgs)
     ErrorResponseHandler(w, err)
@@ -123,7 +123,7 @@ func JSONResponseHandler(w http.ResponseWriter, jsonResponse []byte, err error) 
     w.WriteHeader(http.StatusOK)
     w.Write(jsonResponse)
 }
-func ManageApiArguments(r *http.Request) Dto.ActionApiArguments{
+func ManageActionApiArguments(r *http.Request) Dto.ActionApiArguments{
     queryValues := r.URL.Query()
 
     isHiddenStr := queryValues.Get("isHidden")
