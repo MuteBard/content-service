@@ -2,9 +2,6 @@ package mirrorMove
 
 import (
     "log"
-    // "fmt"
-    // "time"
-    // "strconv"
     "net/http"
     "encoding/json"
     Service "mirrorMove/src/service"
@@ -19,26 +16,27 @@ func NewMoveController(service * Service.MoveService) * MoveController {
     return &MoveController{service : service}
 }
 
-func (mc *MoveController) SearchMove(w http.ResponseWriter, r *http.Request){
+func (this *MoveController) SearchMove(w http.ResponseWriter, r *http.Request){
     log.Println("GET /move/search")
     moveApiArgs := ManageMoveApiArguments(r)
 
-    result, err := mc.service.SearchMoves(moveApiArgs)
+    result, err := this.service.SearchMoves(moveApiArgs)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
 
-func (mc *MoveController) GetMove(w http.ResponseWriter, r *http.Request){
+func (this *MoveController) GetMove(w http.ResponseWriter, r *http.Request){
     id := r.PathValue("id")
     log.Println("GET /move/"+id)
-    result, err := mc.service.GetMove(id)
+    result, err := this.service.GetMove(id)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
 
-func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
+func (this *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
+    log.Println("POST /move")
     var moveCreate Dto.MoveCreate
     err := json.NewDecoder(r.Body).Decode(&moveCreate)
     if err != nil {
@@ -46,7 +44,7 @@ func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
         return
     }
 
-    result, err := mc.service.CreateMove(moveCreate)
+    result, err := this.service.CreateMove(moveCreate)
 
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
@@ -54,7 +52,7 @@ func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
 
 }
 
-func (mc *MoveController) PatchMove(w http.ResponseWriter, r *http.Request) {
+func (this *MoveController) PatchMove(w http.ResponseWriter, r *http.Request) {
     log.Println("PATCH /move");
     var moveUpdate Dto.MoveUpdate
     err := json.NewDecoder(r.Body).Decode(&moveUpdate)
@@ -64,7 +62,7 @@ func (mc *MoveController) PatchMove(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    result, err := mc.service.UpdateMove(moveUpdate)
+    result, err := this.service.UpdateMove(moveUpdate)
 
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
@@ -72,25 +70,15 @@ func (mc *MoveController) PatchMove(w http.ResponseWriter, r *http.Request) {
    
 }
 
-
-
-
-
-
-
-
-
-func (mc *MoveController) DeleteMove(w http.ResponseWriter, r *http.Request) {
+func (this *MoveController) DeleteMove(w http.ResponseWriter, r *http.Request) {
     id :=r.PathValue("id")
     log.Println("DELETE /move/"+id)
 
-    result, err := mc.service.HideMove(id)
+    result, err := this.service.HideMove(id)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
-
-
 
 func ManageMoveApiArguments(r *http.Request) Dto.MoveApiArguments{
     queryValues := r.URL.Query()

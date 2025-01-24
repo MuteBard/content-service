@@ -15,6 +15,7 @@ func NewActionRepository(db *gorm.DB) *ActionRepository {
     return &ActionRepository{db: db}
 }
 
+var fields = "id, name, created_at, updated_at, description_, seconds, is_hidden, token"
 
 func (this *ActionRepository) buildSearchQuery(args Dto.ActionApiArguments) *gorm.DB {
     query := this.db
@@ -60,7 +61,7 @@ func (this *ActionRepository) SearchActions(args Dto.ActionApiArguments) ([]Dto.
 
     query := this.buildSearchQuery(args)
 
-    if err := query.Select("id, name, created_at, description_, seconds, is_hidden, token").Find(&actions).Error; err != nil {
+    if err := query.Select(fields).Find(&actions).Error; err != nil {
         return nil, err
     }
 
@@ -92,16 +93,18 @@ func (this *ActionRepository) CreateAction(action Dto.Action) ([]Dto.Action, err
 }
 
 func (this *ActionRepository) UpdateAction(action Dto.Action) ([]Dto.Action, error) {
+    var existingAction Dto.Action
     var actions []Dto.Action
 
-    existingAction := Dto.Action{}
+    
     if err := this.db.Where("id = ?", action.Id).First(&existingAction).Error; err != nil {
         return nil, err
     }
 
     // Update the existing action with the new values
     existingAction.Name = action.Name
-    existingAction.CreatedAt = time.Now().Format(time.RFC3339)
+    existingAction.CreatedAt = action.CreatedAt
+    existingAction.UpdatedAt = time.Now().Format(time.RFC3339)
     existingAction.Description = action.Description
     existingAction.Seconds = action.Seconds
     existingAction.Token = action.Token

@@ -1,7 +1,6 @@
 package mirrorMove
 
 type MoveCreate struct {
-    Name            string   
-	ActionLoops   	[]MoveActionCreate
+	Name        string
+	ActionLoops []MovesActionCreate
 }
-

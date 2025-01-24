@@ -1,6 +1,7 @@
 package mirrorMove
 
 import (
+    "time"
     Dto "mirrorMove/src/dtos"
     Repository "mirrorMove/src/repository"
 )
@@ -34,8 +35,19 @@ func (this *ActionService) GetAction(id string) ([]Dto.Action, error) {
     return actions, nil;
 }
 
-func (this *ActionService) CreateAction(action Dto.Action) ([]Dto.Action, error) {
-    actions, err := this.repo.CreateAction(action);
+func (this *ActionService) CreateAction(actionCreate Dto.ActionCreate) ([]Dto.Action, error) {
+    
+    //create an action object
+	newAction := Dto.Action{
+		Name: actionCreate.Name,
+        Description: actionCreate.Description,
+        Seconds: actionCreate.Seconds,
+        Token: actionCreate.Token,
+        CreatedAt: time.Now().Format(time.RFC3339),
+        UpdatedAt: time.Now().Format(time.RFC3339),
+	}
+    
+    actions, err := this.repo.CreateAction(newAction);
     
     if err != nil {
         return nil, err
@@ -44,8 +56,21 @@ func (this *ActionService) CreateAction(action Dto.Action) ([]Dto.Action, error)
     return actions, nil;
 }
 
-func (this *ActionService) UpdateAction(action Dto.Action) ([]Dto.Action, error) {
-    actions, err := this.repo.UpdateAction(action);
+func (this *ActionService) UpdateAction(actionUpdate Dto.ActionUpdate) ([]Dto.Action, error) {
+    
+    //recreate an existing an action object
+	existingAction := Dto.Action {
+        Id: actionUpdate.Id,
+		Name: actionUpdate.Name,
+        Description: actionUpdate.Description,
+        Seconds: actionUpdate.Seconds,
+        Token: actionUpdate.Token,
+        CreatedAt: time.Now().Format(time.RFC3339),
+        UpdatedAt: time.Now().Format(time.RFC3339),
+	}
+    
+    
+    actions, err := this.repo.UpdateAction(existingAction);
     
     if err != nil {
         return nil, err

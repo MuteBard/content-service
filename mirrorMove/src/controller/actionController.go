@@ -2,16 +2,12 @@ package mirrorMove
 
 import (
     "fmt"
-    "strconv"
     "log"
-    "time"
     "net/http"
     "encoding/json"
-
     Service "mirrorMove/src/service"
     Dto "mirrorMove/src/dtos"
 )
-
 
 type ActionController struct {
     service *Service.ActionService
@@ -21,88 +17,63 @@ func NewActionController(service * Service.ActionService) * ActionController {
     return &ActionController{service : service}
 }
 
-func (ac *ActionController) SearchAction(w http.ResponseWriter, r *http.Request){
+func (this *ActionController) SearchAction(w http.ResponseWriter, r *http.Request){
     log.Println("GET /action/search")
     actionApiArgs := ManageActionApiArguments(r)
 
-    result, err := ac.service.SearchActions(actionApiArgs)
+    result, err := this.service.SearchActions(actionApiArgs)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
 
-func (ac *ActionController) GetAction(w http.ResponseWriter, r *http.Request){
+func (this *ActionController) GetAction(w http.ResponseWriter, r *http.Request){
     id := r.PathValue("id")
     log.Println("GET /action/"+id)
-    result, err := ac.service.GetAction(id)
+    result, err := this.service.GetAction(id)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
 
-func (ac *ActionController) CreateAction(w http.ResponseWriter, r *http.Request){
+func (this *ActionController) CreateAction(w http.ResponseWriter, r *http.Request){
     log.Println("POST /action")
-
-    var data map[string]interface{}
-    if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+    var actionCreate Dto.ActionCreate
+    if err := json.NewDecoder(r.Body).Decode(&actionCreate); err != nil {
         http.Error(w, "Bad Request", http.StatusBadRequest)
         return
     }
 
-    action := Dto.Action {
-        Name: data["name"].(string),
-        CreatedAt: time.Now().Format(time.RFC3339),
-        Description: data["description"].(string),
-        Seconds:data["seconds"].(float64),
-        Token: data["token"].(string),
-    }
+    result, err := this.service.CreateAction(actionCreate)
 
-    result, err := ac.service.CreateAction(action)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
 
-func (ac *ActionController) PatchAction(w http.ResponseWriter, r *http.Request){
+func (this *ActionController) PatchAction(w http.ResponseWriter, r *http.Request){
     log.Println("PATCH /action")
+    var actionUpdate Dto.ActionUpdate
 
-    var data map[string]interface{}
-    if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+    if err := json.NewDecoder(r.Body).Decode(&actionUpdate); err != nil {
         http.Error(w, "Bad Request", http.StatusBadRequest)
         return
     }
 
-    id, err := strconv.Atoi(fmt.Sprintf("%v", data["id"]))
-    if err != nil {
-        fmt.Println(data["id"])
-        http.Error(w, "Invalid ID", http.StatusBadRequest)
-        return
-    }
-
-    action := Dto.Action {
-        Id: uint(id),
-        Name: data["name"].(string),
-        CreatedAt: time.Now().Format(time.RFC3339),
-        Description: data["description"].(string),
-        Seconds:data["seconds"].(float64),
-        Token: data["token"].(string),
-    }
-
-    result, err := ac.service.UpdateAction(action)
+    result, err := this.service.UpdateAction(actionUpdate)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
 
-func (ac *ActionController) DeleteAction(w http.ResponseWriter, r *http.Request){
+func (this *ActionController) DeleteAction(w http.ResponseWriter, r *http.Request){
     id := r.PathValue("id")
     log.Println("DELETE /action/"+id)
-    result, err := ac.service.HideAction(id)
+    result, err := this.service.HideAction(id)
     ErrorResponseHandler(w, err)
     jsonResponse, err := json.Marshal(result)
     JSONResponseHandler(w, jsonResponse, err)
 }
-
 
 func ErrorResponseHandler(w http.ResponseWriter, err error){
     if err != nil {
@@ -123,6 +94,7 @@ func JSONResponseHandler(w http.ResponseWriter, jsonResponse []byte, err error) 
     w.WriteHeader(http.StatusOK)
     w.Write(jsonResponse)
 }
+
 func ManageActionApiArguments(r *http.Request) Dto.ActionApiArguments{
     queryValues := r.URL.Query()
 

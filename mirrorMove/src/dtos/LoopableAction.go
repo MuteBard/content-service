@@ -1,6 +1,6 @@
 package mirrorMove
 
 type LoopableAction struct {
-	Action   		Action	
-	Loops        	int
+    Action       Action    
+    Loops        int
 }
