@@ -143,10 +143,100 @@ func (this *MoveRepository) CreateMove(moveCreate Dto.MoveCreate)  ([]Dto.Move, 
     }
 
     newMove.Actions = loopableActions
-
     moves = append(moves, newMove)
 
     return moves, nil;
+}
+
+func (this *MoveRepository) UpdateMove(moveUpdate Dto.MoveUpdate)  ([]Dto.Move, error){
+    var moves []Dto.Move
+    var loopableActions []Dto.LoopableAction
+
+    existingMove := Dto.Move{}
+    if err := this.db.Where("id = ?", moveUpdate.Id).First(&existingMove).Error; err != nil{
+        return nil, err
+    }
+
+    //create a move object with input name and time
+    existingMove.Name = moveUpdate.Name
+    existingMove.CreatedAt = time.Now().Format(time.RFC3339)
+    existingMove.IsHidden = moveUpdate.IsHidden
+    existingMove.Description = moveUpdate.Description
+    existingMove.Seconds = moveUpdate.Seconds
+
+
+    if err := this.db.Save(&existingMove).Error; err != nil {
+        return nil, err
+    }
+
+    // delete all pairings in joint table associated with the move id
+    if err := this.db.Where("move_id = ?", existingMove.Id).Delete(&Dto.MoveAction{}).Error; err != nil {
+        return nil, err
+    }
+
+    //use the input's list of loopable actions
+    for _, actionLoop := range moveUpdate.ActionLoops {
+
+        //create a new moveAction object for the junction table move_action
+        newMoveAction := Dto.MoveAction {
+            MoveId: existingMove.Id,
+            ActionId: actionLoop.ActionId,
+            Loops: actionLoop.Loops,
+        }
+
+        // create a new move_action
+        if err := this.db.Create(&newMoveAction).Error; err != nil {
+            return nil, err
+        }
+
+        existingAction := Dto.Action{}
+        if err := this.db.Where("id = ?", actionLoop.ActionId).First(&existingAction).Error; err != nil {
+            return nil, err
+        }
+            
+        loopableAction := Dto.LoopableAction {
+            Action: existingAction,
+            Loops: actionLoop.Loops,
+        }
+
+        loopableActions = append(loopableActions, loopableAction)
+    }
+
+    existingMove.Actions = loopableActions
+    moves = append(moves, existingMove)
+
+    return moves, nil;
+}
+
+
+
+func (this *MoveRepository) HideMove(id string) ([]Dto.Move, error) {
+    var move Dto.Move
+    var moves []Dto.Move
+    var joinMoveAction []Dto.JoinMoveAction 
+
+    if err := this.db.Where("id = ?", id).First(&move).Error; err != nil{
+        return nil, err
+    }
+
+    move.IsHidden = true
+    
+    if err := this.db.Save(&move).Error; err != nil {
+        return nil, err
+    }
+
+    if err := this.db.Debug().
+        Select("moves.id, moves.name, moves.created_at, moves.is_hidden, moves.description_, moves.seconds, move_actions.loops, actions.id, actions.name, actions.created_at, actions.is_hidden, actions.description_, actions.seconds, actions.token").
+        Table("moves").
+        Joins("LEFT OUTER JOIN move_actions ON moves.id = move_actions.move_id").
+        Joins("LEFT OUTER JOIN actions ON move_actions.action_id = actions.id").
+        Where("moves.id = ?", id).
+        Scan(&joinMoveAction).Error; err != nil {
+            return nil, err
+    }
+
+    moves = generateMoves(joinMoveAction)
+    return moves, nil
 
 }
 

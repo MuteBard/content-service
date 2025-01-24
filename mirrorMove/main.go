@@ -34,8 +34,6 @@ func main() {
     actionController :=  Controller.NewActionController(actionsService)
     moveController :=  Controller.NewMoveController(movesService)
 
-
-
     mux.HandleFunc("GET /action/search", actionController.SearchAction)
     mux.HandleFunc("GET /action/{id}", actionController.GetAction)
     mux.HandleFunc("POST /action", actionController.CreateAction)
@@ -45,7 +43,8 @@ func main() {
     mux.HandleFunc("GET /move/search", moveController.SearchMove)
     mux.HandleFunc("GET /move/{id}", moveController.GetMove)
     mux.HandleFunc("POST /move", moveController.CreateMove)
-
+    mux.HandleFunc("PATCH /move", moveController.PatchMove)
+    mux.HandleFunc("DELETE/move/{id}", moveController.DeleteMove)
 
     err = http.ListenAndServe("localhost:8080", mux)
     if err != nil {

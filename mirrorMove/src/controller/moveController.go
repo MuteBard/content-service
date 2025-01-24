@@ -54,6 +54,42 @@ func (mc *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
 
 }
 
+func (mc *MoveController) PatchMove(w http.ResponseWriter, r *http.Request) {
+    log.Println("PATCH /move");
+    var moveUpdate Dto.MoveUpdate
+    err := json.NewDecoder(r.Body).Decode(&moveUpdate)
+
+    if err != nil {
+        http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+        return
+    }
+
+    result, err := mc.service.UpdateMove(moveUpdate)
+
+    ErrorResponseHandler(w, err)
+    jsonResponse, err := json.Marshal(result)
+    JSONResponseHandler(w, jsonResponse, err)
+   
+}
+
+
+
+
+
+
+
+
+
+func (mc *MoveController) DeleteMove(w http.ResponseWriter, r *http.Request) {
+    id :=r.PathValue("id")
+    log.Println("DELETE /move/"+id)
+
+    result, err := mc.service.HideMove(id)
+    ErrorResponseHandler(w, err)
+    jsonResponse, err := json.Marshal(result)
+    JSONResponseHandler(w, jsonResponse, err)
+}
+
 
 
 func ManageMoveApiArguments(r *http.Request) Dto.MoveApiArguments{

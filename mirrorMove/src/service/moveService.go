@@ -44,3 +44,23 @@ func (this *MoveService) CreateMove(moveCreate Dto.MoveCreate) ([]Dto.Move, erro
 
     return moves, nil;
 }
+
+func (this *MoveService) UpdateMove(moveUpdate Dto.MoveUpdate) ([]Dto.Move, error) {
+    moves, err := this.repo.UpdateMove(moveUpdate);
+    
+    if err != nil {
+        return nil, err
+    }
+
+    return moves, nil;
+}
+
+func (this *MoveService) HideMove(id string) ([]Dto.Move, error) {
+    moves, err := this.repo.HideMove(id);
+
+    if err != nil {
+        return nil, err
+    }
+
+    return moves, nil;
+}
