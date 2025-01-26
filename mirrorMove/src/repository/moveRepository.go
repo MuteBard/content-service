@@ -1,7 +1,7 @@
 package mirrorMove
 
 import (
-    "log"
+	"log"
 	Dto "mirrorMove/src/dtos"
 	"time"
 
@@ -16,7 +16,7 @@ func NewMoveRepository(db *gorm.DB) *MoveRepository {
 	return &MoveRepository{db: db}
 }
 
-var joinFields = "moves.id, moves.name, moves.created_at, moves.updated_at, moves.is_hidden, moves.description_, moves.seconds, moves_actions.loops, actions.id, actions.name, actions.created_at, actions.updated_at, actions.is_hidden, actions.description_, actions.seconds, actions.token"
+var joinFields = "moves.id as MId, moves.name as MName, moves.created_at as MCreatedAt, moves.updated_at as MUpdatedAt, moves.is_hidden as MIsHidden, moves.description_ as MDescription, moves.seconds as MSeconds, moves_actions.loops as Loops, actions.id as AId, actions.name as AName, actions.created_at as ACreatedAt, actions.updated_at as AUpdatedAt, actions.is_hidden as AIsHidden, actions.description_ as ADescription, actions.seconds as ASeconds, actions.token as AToken"
 
 func (this *MoveRepository) buildSearchQuery(args Dto.MoveApiArguments) *gorm.DB {
 	query := this.db
@@ -274,7 +274,7 @@ func generateMoves(joinMovesAction []Dto.JoinMovesAction) []Dto.Move {
 			Id:          jma.MId,
 			Name:        jma.MName,
 			CreatedAt:   jma.MCreatedAt,
-			UpdatedAt:   jma.AUpdatedAt,
+			UpdatedAt:   jma.MUpdatedAt,
 			IsHidden:    jma.MIsHidden,
 			Description: jma.MDescription,
 			Seconds:     jma.MSeconds,

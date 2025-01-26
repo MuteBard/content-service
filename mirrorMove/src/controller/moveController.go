@@ -43,7 +43,6 @@ func (this *MoveController) CreateMove(w http.ResponseWriter, r *http.Request){
         http.Error(w, "Failed to decode request body", http.StatusBadRequest)
         return
     }
-
     result, err := this.service.CreateMove(moveCreate)
 
     ErrorResponseHandler(w, err)
