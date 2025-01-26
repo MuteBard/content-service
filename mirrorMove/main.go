@@ -44,7 +44,7 @@ func main() {
     mux.HandleFunc("GET /move/{id}", moveController.GetMove)
     mux.HandleFunc("POST /move", moveController.CreateMove)
     mux.HandleFunc("PATCH /move", moveController.PatchMove)
-    mux.HandleFunc("DELETE/move/{id}", moveController.DeleteMove)
+    mux.HandleFunc("DELETE /move/{id}", moveController.DeleteMove)
 
     err = http.ListenAndServe("localhost:8080", mux)
     if err != nil {

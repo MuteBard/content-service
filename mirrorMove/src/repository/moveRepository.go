@@ -107,8 +107,10 @@ func (this *MoveRepository) CreateMove(moveCreate Dto.MoveCreate) ([]Dto.Move, e
 	var loopableActions []Dto.LoopableAction
 
 	newMove.Name = moveCreate.Name
+	newMove.Description = moveCreate.Description
 	newMove.CreatedAt = time.Now().Format(time.RFC3339)
 	newMove.UpdatedAt = time.Now().Format(time.RFC3339)
+	newMove.Seconds = moveCreate.Seconds
 
 	//create move in db
 	if err := this.db.Create(&newMove).Error; err != nil {
