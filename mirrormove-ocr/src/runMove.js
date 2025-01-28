@@ -126,6 +126,3 @@ function getResponseUpdate(prevStep, currStep, nextStep) {
 
 
 exports.executeMove = executeMove;
-
-
-// { x1: 1769, y1: 673, x2: null, y2: null }cleancleanclean
