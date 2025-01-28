@@ -1,6 +1,6 @@
 # MirrorMove
 
-A CRUD Backend for mirrorMove CMS and mirrorMove-ocr
+A CRUD Backend for [mirrormove-cms](https://github.com/MuteBard/mirrormove-cms) and mirrorMove-ocr
 
 * CRUD Actions
 * CRUD Moves
