@@ -1,0 +1,19 @@
+{
+  "name": "mirrormove-ocr",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "clear && node --no-deprecation -r ./env/initializeEnvs.js index.js dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@nut-tree-fork/nut-js": "^4.2.4",
+    "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
