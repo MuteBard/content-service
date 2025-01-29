@@ -14,10 +14,8 @@ async function cameraMan({ x, y, width, height, title}) {
     const cropped = await sharp(picture).extract({ left, top, width, height}).toBuffer();
     const filepath = setDestination(title)
 
-    removeFile(filepath, cropped);
-    setTimeout(() => {
-        makeFile(filepath, cropped);
-    }, 2000)
+    makeFile(filepath, cropped);
+    
 }
 
 function setDestination(title) {
