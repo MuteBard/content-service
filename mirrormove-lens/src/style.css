@@ -1,0 +1,113 @@
+
+
+* {
+	font-family: Roboto, sans-serif;
+	font-weight:bolder;
+	font-style:normal;
+	letter-spacing: 2px;
+	font-size: 20px;
+}
+canvas {
+	border: 5px dotted red; /* Add a border for visibility */
+}
+.modal {
+	display: none;
+	margin: 1em;
+	position: absolute;
+	top: 50%; 
+	left: 50%; 
+	transform: translate(-50%, -50%);
+}
+
+.modal-container {
+	display:flex;
+}
+
+.modal-container > div {
+	margin: .5em;
+}
+
+.title-input {
+	/* flex: 1; */
+	padding: 8px;
+	border-radius: 4px;
+}
+
+.title-submit {
+	padding: 8px 16px;
+	background-color: #a7adc6;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.custom-button,
+.run-button,
+.cancel-button,
+.orderBy {
+	padding: 10px 20px;
+	background-color: #5a70cb; /* Button color */
+	color: #e7e7f1;
+	border: none;
+	border-radius: 5px; /* Rounded corners */
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
+	box-shadow: 0 8px 12px rgba(51, 44, 55, 0.1); /* Add shadow effect */
+	transform: translateY(1px); /* Move the button down slightly */
+}
+
+.run-button  {
+	background-color: #09e74c;
+	/* padding: 15px 25px;
+	font-size: 20px; */
+}
+
+.cancel-button  {
+	background-color: #ff6262;
+	/* padding: 15px 25px;
+	font-size: 20px; */
+}
+
+.custom-button:hover, .orderBy:hover {
+	background-color: #413ab8;
+}
+
+.run-button:hover .orderBy:hover{
+	background-color: #413ab8
+}
+
+.cancel-button:hover  {
+	background-color: #d64d74;
+}
+
+.custom-button:active,
+.run-button:active
+.cancel-button:active{
+	box-shadow: none; /* Remove shadow when button is clicked */
+	transform: translateY(2px); /* Further move the button down when clicked */
+	background-color: #3a226d;
+}
+
+.cancel-button:active {
+	background-color: #ae284e;
+}
+
+input, textarea{
+	border-radius: 10px;
+	background-color : #7b78af;
+	color: #e7e7f1;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #e7e7f1;
+
+}
+
+.custom-button:hover, .orderBy:hover {
+	background-color: #413ab8;
+}
+
+.run-button:hover .orderBy:hover{
+	background-color: #413ab8
+}
