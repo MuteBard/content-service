@@ -55,14 +55,21 @@ function redrawCanvas() {
 document.getElementById("saveTitle").addEventListener("click", async () => {
   const title = document.getElementById("selectTitle").value.replace(/ /g, '_');
   const updatedRect = {
-    ...rect,
+	...screenshotPositionAdjustments(rect),
     title,
   };
+  console.log(updatedRect)
 
   const modal = document.getElementById("modal");
   modal.style.display = "none";
-  console.log(updatedRect)
-  makeFile(`./savedPositions/${title}.json`, JSON.stringify(updatedRect));
-  document.getElementById("selectTitle").value = ""
 
+  makeFile(`./savedPositions/${title}.json`, JSON.stringify(updatedRect));
 });
+
+function screenshotPositionAdjustments(rect){
+    let x = 10
+    let y = 35
+    rect.x = rect.x + x
+    rect.y = rect.y + y
+    return rect
+}

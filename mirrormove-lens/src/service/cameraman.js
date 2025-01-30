@@ -12,25 +12,17 @@ async function cameraMan({ x, y, width, height, title}) {
 
     const picture = await screenshot();
     const cropped = await sharp(picture).extract({ left, top, width, height}).toBuffer();
-    const filepath = setDestination(title)
-
+    const fileName = `${title}.jpg`;
+    const filepath = path.join(__dirname, `../../../mirrormove-ocr/src/screenshots/${fileName}`)
     makeFile(filepath, cropped);
     
 }
-
-function setDestination(title) {
-    const fileName = `${title}.jpg`;
-    if (title.includes("move")) { 
-       return path.join(__dirname, `../../../mirrormove-ocr/src/screenshots/moves/${fileName}`)
-    }
-    return path.join(__dirname, `../../../mirrormove-ocr/src/screenshots/${title}/${fileName}`)
-}
-
 
 async function takePictures() {
     console.log(`${getDate()} | iteration ${i++}`)
     const filePath = path.join(__dirname, `../savedPositions/`)
     let fileNames = await getFileNames(filePath);
+    // console.log(fileNames)
     await Promise.all(fileNames.map(async(fileName) => {
         const data = await getFile(`${filePath}/${fileName}`)
         cameraMan(JSON.parse(data))
@@ -42,7 +34,7 @@ function getDate() {
 }
 
 
-setInterval(takePictures, 5000)
+setInterval(takePictures, 2500)
 
 
 

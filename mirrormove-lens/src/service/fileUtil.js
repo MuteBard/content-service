@@ -5,7 +5,7 @@ exports.readdir = (name, options = { withFileTypes: true }) => {
         fs.readdir('..', options, (err, files) => {
             if (err) reject(err);
             else {
-                console.log(`listed directories`);
+                // console.log(`listed directories`);
                 resolve(new Set(files.filter(dirent => dirent.isDirectory())
                     .map(dirent => dirent.name)))
             }
@@ -19,7 +19,7 @@ exports.mkdir = (name, options = { recursive: true }) => {
         fs.mkdir(name, options, (err,) => {
             if (err) reject(err);
             else {
-                console.log(`Created new directory ${name}`);
+                // console.log(`Created new directory ${name}`);
                 resolve();
             }
         })
@@ -31,7 +31,7 @@ exports.rmdir = (name, options = { recursive: true }) => {
         fs.rmdir(name, options, (err) => {
             if (err) reject(err);
             else {
-                console.log(`Deleted directory ${name}`);
+                // console.log(`Deleted directory ${name}`);
                 resolve();
             }
         })
@@ -43,7 +43,7 @@ exports.move = (name, destination, options = { overwrite: false }) => {
         fs.move(name, destination, options, (err) => {
             if (err) reject(err);
             else {
-                console.log(`Moved directory at ${destination}`);
+                // console.log(`Moved directory at ${destination}`);
                 resolve();
             }
         })
@@ -55,7 +55,7 @@ exports.rename = (oldName, newName) => {
         fs.rename(oldName, newName, (err) => {
             if (err) reject(err);
             else {
-                console.log(`renamed ${oldName} to ${newName}`);
+                // console.log(`renamed ${oldName} to ${newName}`);
                 resolve();
             }
         })
@@ -67,7 +67,7 @@ exports.writeFile = (name, content = '') => {
         fs.writeFile(name, content, (err) => {
             if (err) reject(err);
             else {
-                console.log(`Created ${name}`);
+                // console.log(`Created ${name}`);
                 resolve();
             }
         })
